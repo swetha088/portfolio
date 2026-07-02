@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coding Profiles</title>
+  <link rel="icon" href="./images/coding_icon.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: black;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Canvas behind everything */
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+    }
+
+    .container {
+      padding: 30px;
+      border-radius: 15px;
+      display: flex;
+      gap: 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card {
+      width: 100px;
+      height: 100px;
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(6px);
+    }
+
+    .card:hover {
+      transform: translateY(-10px) scale(1.05);
+      box-shadow: 0px 8px 20px rgba(255, 255, 255, 0.25);
+    }
+
+    .card img {
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+    }
+
+    h1 {
+      position: absolute;
+      top: 200px;
+      text-align: center;
+      width: 100%;
+      color: blue;
+      text-shadow: 0 0 10px #1C6EA4;
+      font-size: 28px;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <h1>Coding Profiles</h1>
+  
+  <!-- Particle Background -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- Profile Cards -->
+  <div class="container">
+    <a href="https://leetcode.com/u/_sai_surya_vinay/" target="_blank" class="card">
+      <img src="./images/leetcode-icon.webp" alt="LeetCode">
+    </a>
+    <a href="https://www.hackerrank.com/saisuryavinay06" target="_blank" class="card">
+      <img src="./images/hackerrank-icon.png" alt="HackerRank">
+    </a>
+    <a href="https://www.codechef.com/users/saisuryavinay" target="_blank" class="card">
+      <img src="./images/codechef.jpg" alt="CodeChef">
+    </a>
+    <a href="https://www.geeksforgeeks.org/user/vinay_devu18/" target="_blank" class="card">
+      <img src="./images/gfg.png" alt="GeeksforGeeks">
+    </a>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("particleCanvas");
+    const ctx = canvas.getContext("2d");
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particlesArray = [];
+    const numParticles = 120;
+
+    class Particle {
+      constructor(x, y, size, speedX, speedY) {
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.speedX = speedX;
+        this.speedY = speedY;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+
+      draw() {
+        ctx.fillStyle = "white";
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    // Create particles
+    for (let i = 0; i < numParticles; i++) {
+      let size = Math.random() * 1.5 + 0.5; // smaller particles
+      let x = Math.random() * canvas.width;
+      let y = Math.random() * canvas.height;
+      let speedX = (Math.random() - 0.5) * 1.5;
+      let speedY = (Math.random() - 0.5) * 1.5;
+      particlesArray.push(new Particle(x, y, size, speedX, speedY));
+    }
+
+    // Animation
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let particle of particlesArray) {
+        particle.update();
+        particle.draw();
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Resize handling
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
